@@ -1,3 +1,6 @@
+
+(another way to create a chess board)
+
 const table = document.createElement('table');
 document.body.appendChild(table);
 
