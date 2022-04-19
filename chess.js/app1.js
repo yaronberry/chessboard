@@ -11,10 +11,23 @@ const KING = 'king';
 const QUEEN = 'queen';
 
 const BOARD_SIZE = 8 ;
+let boardData ;
 
 
+class BoardData { //here is the father off all the creation (except the board)
+  constructor(pieces){
+    this.pieces= pieces;
+  }
+  getPiece(row,col){
+    for(const piece of this.pieces){
+      if(piece.row === row && piece.col === col){
+        return piece ;
+      }
+    }
+  }
+}
 
-function onCellClick(event, row , col){
+function onCellClick(event, row , col){ // this function make all the "coloring"
     console.log(col);
     console.log(row);
     for(let i = 0 ; i< BOARD_SIZE ; i++){
@@ -22,23 +35,25 @@ function onCellClick(event, row , col){
         table.rows[i].cells[j].classList.remove('possible-move');
       }
     }
-    for(let piece of pieces ){
-      if(piece.row === row && piece.col ===col){
-        let possibleMoves = piece.getPossibleMoves();
-       for(const possibleMove of possibleMoves){
-       table.rows[possibleMove[0]].cells[possibleMove[1]].classList.add('possible-move');
-      }
-    }
-    }
+     const piece = boardData.getPiece(row,col); 
+    if(piece !== undefined){
+      let possibleMoves = piece.getPossibleMoves();
+      for(const possibleMove of possibleMoves){
+        table.rows[possibleMove[0]].cells[possibleMove[1]].classList.add('possible-move');
+       }
+     }
+
+    
     if(selectedCell !== undefined){
       selectedCell.classList.remove('selected');
     }
 
     selectedCell=event.currentTarget;
     selectedCell.classList.add('selected');
+    
 }
 
-function addImage(cell,player,name){
+function addImage(cell,player,name){ // a function to create and insert the image 
   const Image = document.createElement('img');
   Image.src = 'pieces/' + player + '/' + name + '.png' ;
   cell.appendChild(Image);
@@ -46,14 +61,14 @@ function addImage(cell,player,name){
 
 
 
-class Piece {
+class Piece { // a class to represant the making of the pieces + how they "act"
     constructor(row,col,type , player){
         this.row=row;
         this.col=col;
         this.type=type;
         this.player=player;
     }
-    getPossibleMoves(){
+    getPossibleMoves(){  //here we match the possible move to the piece 
     
     let relativeMoves;
     if(this.type=== PAWN){
@@ -71,13 +86,15 @@ class Piece {
     }else{
        console.log('unknown type', type)
     }
-   let absoluteMoves = [] ;
+   let absoluteMoves = [] ; // so after we got the relative move we need to updat to the place of the piece
    for(let relativeMove of relativeMoves ){
      const absoluteRow = this.row + relativeMove[0];
      const absoluteCol = this.col + relativeMove[1];
      absoluteMoves.push([absoluteRow, absoluteCol]); 
-   }
-      let filteredMoves = [];
+     //relativeMove[0] this one represent first elemet of the first element of the array(1)ex
+     //relativeMoves[0]this one represent first elemet of the array([1,0])ex
+  }
+      let filteredMoves = []; // here we substract all the possibillitis that isnt in the board 
       for(let absoluteMove of absoluteMoves){
         const absoluteRow = absoluteMove[0];
         const absoluteCol = absoluteMove[1];
@@ -86,10 +103,9 @@ class Piece {
         }
       }
     
-    return  filteredMoves ;
+    return  filteredMoves ; // and we return everything as an array
   }
     getPawnRelativeMoves(){
-      let upOrDown;
       if(this.player===DARK_PLAYER){
         return[[-1,0]];
       }
@@ -161,7 +177,7 @@ class Piece {
     }
   }
 
-function getInitialBoard(){
+function getInitialPieces(){ // here we create an object for every pieces
 let result = [];
  addPieces(result,0,WHITE_PLAYER); 
  addPieces(result,7,DARK_PLAYER);
@@ -183,7 +199,7 @@ function addPieces(result,row,player) {
   result.push(new Piece(row, 6, KNIGHT, player));
   result.push(new Piece(row, 7, ROOK, player));
 }
-  function chessBoard () {
+  function chessBoard () { // here we created the board
  table = document.createElement('table');
   document.body.appendChild(table);
   table.id = "tb" ;
@@ -203,11 +219,9 @@ function addPieces(result,row,player) {
           cell.className = "whitecub" ;
            } 
     }
-   
-
   } 
-  pieces= getInitialBoard();
-  for(let piece of pieces){
+  boardData =new BoardData(getInitialPieces());
+  for(let piece of boardData.pieces){
     addImage(table.rows[piece.row].cells[piece.col],piece.player,piece.type );
       
   }

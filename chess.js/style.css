@@ -36,18 +36,14 @@ tr,td:active{
     
     */
    
-    #blackcub{
-        background-color: darkolivegreen;
-    }
-    #whitecub{
-        background-color:oldlace;
-    }
+   
 
     .selected{
       background-color: red;
     }
     
     .possible-move{
-      background-color: rgb(200, 255, 0);
+      background-color:  rgb(208, 140, 240);
     }
+    
     
