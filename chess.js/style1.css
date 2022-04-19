@@ -1,0 +1,17 @@
+
+table{
+border: 2px solid black;
+}
+
+td , tr {
+    width: 60px;
+    height: 60px;
+}
+
+.blackcub{
+  background-color: black;
+}
+
+.whitecub{
+    background-color: aqua;
+}

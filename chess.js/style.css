@@ -47,3 +47,7 @@ tr,td:active{
       background-color: red;
     }
     
+    .possible-move{
+      background-color: rgb(200, 255, 0);
+    }
+    

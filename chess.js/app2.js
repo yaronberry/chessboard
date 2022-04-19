@@ -1,55 +1,92 @@
 
-tyuta page !!
+const BOARD_SIZE = 8;
+let pieces = [];
+const WHITE_PLAYER = 'white' ;
+const DARK_PLAYER = 'black';
 
-let selectedCell;
-cell.addEventListener('click',onCellClick);
+let table ;
 
-function onCellClick(event){
-    if(selectedCell !== undefined){
-        selectedCell.classList.remove('selected');
-    
+const PAWN = 'pawn';
+const ROOK = 'rook';
+const KNIGHT = 'knight';
+const BISHOP = 'bishop';
+const KING = 'king';
+const QUEEN = 'queen';
+
+class Piece {
+    constructor( row,coll,type , player){
+        this.row = row ;
+        this.coll = coll ;
+        this.type = type ;
+        this.player= player;
     }
-    selectedCell=event.currentTarget;
-    selectedCell.classList.add('selected');
+    
+}
+
+function getInitialBoard(){
+    let result = [];
+     addPieces(result,0,WHITE_PLAYER); 
+     addPieces(result,7,DARK_PLAYER);
+    
+     for(let i =0 ; i < 8 ; i++){
+      result.push(new Piece(1,i,PAWN,WHITE_PLAYER))
+      result.push(new Piece(6,i,PAWN,DARK_PLAYER))
+     }
+     return result;
+    }
+
+function addPieces(result,row,player) {
+    result.push(new Piece(row, 0, ROOK, player));
+    result.push(new Piece(row, 1, KNIGHT, player));
+    result.push(new Piece(row, 2, BISHOP, player));
+    result.push(new Piece(row, 3, QUEEN, player));
+    result.push(new Piece(row, 4, KING, player));
+    result.push(new Piece(row, 5, BISHOP, player));
+    result.push(new Piece(row, 6, KNIGHT, player));
+    result.push(new Piece(row, 7, ROOK, player));
+  }
+
+  function addImage(cell,player,name){
+    Image = document.createElement('img');
+    Image.src = 'pieces/' + player + '/' + name + '.png' ;
+    cell.appendChild(Image);
 }
 
 
-let pieces=[];
-class Piece{
-    constructor(row,col,type,player){
-        this.row=row;
-        this.col=col;
-        this.type=type;
-        this.player;
+  pieces= getInitialBoard();
+  for(let piece of pieces){
+    addImage(table.rows[piece.row].cells[piece.coll],piece.player,piece.type );
+      
+  }
+  
+
+  function chessBoard () {
+let table = document.createElement('table');
+document.body.appendChild(table);
+
+for(let row= 0; row< BOARD_SIZE; row++){
+
+    const rowElement = table.insertRow(row);
+
+    for(let coll= 0; coll< BOARD_SIZE; coll++){
+
+       const cell = rowElement.insertCell(coll);
+    
+    
+       if((row + coll) % 2 === 0){
+           cell.className = 'blackcub' ;
+       }else{
+        cell.className = 'whitecub' ;
+       }
     }
+
 }
 
-    this is before he ask to make an object for every pieces
+pieces= getInitialBoard();
+  for(let piece of pieces){
+    addImage(table.rows[piece.row].cells[piece.col],piece.player,piece.type );
+      
+  }
+}
 
-         if(i===6){
-            addImage(cell,'https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Chess_plt45.svg/50px-Chess_plt45.svg.png');  
-        }else if (i===1){
-            addImage(cell,'https://upload.wikimedia.org/wikipedia/commons/c/cd/Chess_pdt60.png');  
-        }else if((j===2 || j===5) && i===0 ){
-            addImage(cell,'https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Chess_bdt45.svg/60px-Chess_bdt45.svg.png'); 
-        }else if((j===1 || j===6) && i===0 ){    
-         addImage(cell, 'https://upload.wikimedia.org/wikipedia/commons/f/f1/Chess_ndt60.png');
-        }else if((j===0 || j===7) && i===0 ){
-            addImage(cell,'https://upload.wikimedia.org/wikipedia/commons/a/a0/Chess_rdt60.png');
-        }else if(i===0 && j===3){
-            addImage(cell, 'https://upload.wikimedia.org/wikipedia/commons/a/af/Chess_qdt60.png');
-        }else if(i===0 && j===4){
-            addImage(cell,'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Chess_kdt45.svg/50px-Chess_kdt45.svg.png') ;
-
-        }else if((j===2 || j===5) && i===7 ){
-            addImage(cell,'https://upload.wikimedia.org/wikipedia/commons/9/9b/Chess_blt60.png'); 
-        }else if((j===1 || j===6) && i===7 ){    
-         addImage(cell, 'https://upload.wikimedia.org/wikipedia/commons/2/28/Chess_nlt60.png');
-        }else if((j===0 || j===7) && i===7 ){
-            addImage(cell,'https://upload.wikimedia.org/wikipedia/commons/5/5c/Chess_rlt60.png');
-        }else if(i===7 && j===3){
-            addImage(cell, 'https://upload.wikimedia.org/wikipedia/commons/4/49/Chess_qlt60.png');
-        }else if(i===7 && j===4){
-            addImage(cell,'https://upload.wikimedia.org/wikipedia/commons/3/3b/Chess_klt60.png') ;
-        }
-    
+window.addEventListener('load',chessBoard);
