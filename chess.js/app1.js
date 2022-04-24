@@ -14,6 +14,20 @@ const BOARD_SIZE = 8;
 let boardData;
 let boardData1;
 
+
+/* trying to add the letters on the side of the board 
+let letters = ['a','b','c','d','e','f','g','h'] ;
+for(let letter of letters){
+let li = document.createElement('li');
+console.log(letter);
+const span = document.createElement('span')
+document.span.appendChild(letter);
+document.li.appendChild(span);
+
+document.body.appendChild(li);
+}
+*/
+
 class BoardData { //here is the father off all the creation (except the board)
   constructor(pieces) {
     this.pieces = pieces;
@@ -21,13 +35,27 @@ class BoardData { //here is the father off all the creation (except the board)
   getPiece(row, col) {
     for (const piece of this.pieces) {
       if (piece.row === row && piece.col === col) {
-
+        console.log(piece);
         return piece;
       }
     }
   }
+
+  isEmpty(row,col){
+    return this.getPiece(row,col) === undefined ;
+  }
+  isPlayer(row,col,player){
+    const piece = this.getPiece(row,col);
+    if(piece !== undefined && piece.player === player){
+      return true ;
+    }else{
+      return false ;
+    }
+  }
+
+
 }
-function onCellClick(event, row, col, cell) { // this function make all the "coloring"
+function onCellClick(event, row, col) { // this function make all the "coloring"
   console.log(col);
   console.log(row);
   for (let i = 0; i < BOARD_SIZE; i++) {
@@ -36,15 +64,15 @@ function onCellClick(event, row, col, cell) { // this function make all the "col
       
     }
   }
-  boardData1 = new BoardData(getInitialPieces());
+  
   const piece = boardData.getPiece(row, col);
   console.log(piece);
   if (piece !== undefined) {
-    let possibleMoves = piece.getPossibleMoves();
+    let possibleMoves = piece.getPossibleMoves(boardData);
     console.log(possibleMoves);
     for (const possibleMove of possibleMoves) {
       table.rows[possibleMove[0]].cells[possibleMove[1]].classList.add('possible-move');
-      table.rows[possibleMove[0]].cells[possibleMove[1]].addEventListener('click', () => { addImage(table.rows[possibleMove[0]].cells[possibleMove[1]], piece.player, piece.type); });
+  
     }
   
   }
@@ -75,34 +103,37 @@ class Piece { // a class to represant the making of the pieces + how they "act"
     this.type = type;
     this.player = player;
   }
-  getPossibleMoves() {  //here we match the possible move to the piece 
 
-    let relativeMoves;
+  getOpponent(){
+    if(this.player === WHITE_PLAYER){
+      return DARK_PLAYER ;
+    }
+    return WHITE_PLAYER ;
+  }
+
+
+  getPossibleMoves(boardData) {  //here we match the possible move to the piece 
+
+    let Moves;
     if (this.type === PAWN) {
-      relativeMoves = this.getPawnRelativeMoves();
+      Moves = this.getPawnMoves(boardData);
     } else if (this.type === ROOK) {
-      relativeMoves = this.getRookRelativeMoves();
+      Moves = this.getRookMoves(boardData);
     } else if (this.type === KNIGHT) {
-      relativeMoves = this.getKnightMoves();
+      Moves = this.getKnightMoves(boardData);
     } else if (this.type === BISHOP) {
-      relativeMoves = this.getBishopMoves();
+      Moves = this.getBishopMoves(boardData);
     } else if (this.type === KING) {
-      relativeMoves = this.getkingMoves();
+      Moves = this.getkingMoves(boardData);
     } else if (this.type === QUEEN) {
-      relativeMoves = this.getQueenMoves();
+      Moves = this.getQueenMoves(boardData);
     } else {
       console.log('unknown type', type)
     }
-    let absoluteMoves = []; // so after we got the relative move we need to updat to the place of the piece
-    for (let relativeMove of relativeMoves) {
-      const absoluteRow = this.row + relativeMove[0];
-      const absoluteCol = this.col + relativeMove[1];
-      absoluteMoves.push([absoluteRow, absoluteCol]);
-      //relativeMove[0] this one represent first elemet of the first element of the array(1)ex
-      //relativeMoves[0]this one represent first elemet of the array([1,0])ex
-    }
+  
+    
     let filteredMoves = []; // here we substract all the possibillitis that isnt in the board 
-    for (let absoluteMove of absoluteMoves) {
+    for (let absoluteMove of Moves) {
       const absoluteRow = absoluteMove[0];
       const absoluteCol = absoluteMove[1];
       if (absoluteRow >= 0 && absoluteRow <= 7 && absoluteCol >= 0 && absoluteCol <= 7) {
@@ -112,80 +143,94 @@ class Piece { // a class to represant the making of the pieces + how they "act"
 
     return filteredMoves; // and we return everything as an array
   }
-  getPawnRelativeMoves() {
+  getPawnMoves(boardData) {
+    let result = [] ;
+    let direction = 1 ;
     if (this.player === DARK_PLAYER) {
-      return [[-1, 0]];
+      direction = -1 ;
     }
-    return [[1, 0]];
-  }
-
-  getRookRelativeMoves() {
-    let result = [];
-    for (let i = 1; i < BOARD_SIZE; i++) {
-      result.push([i, 0]);
-      result.push([-i, 0]);
-      result.push([0, i]);
-      result.push([0, -i]);
+    let position = [this.row + direction , this.col];
+    if(boardData.isEmpty(position[0],position[1])){
+       result.push(position);
+    }
+    position = [this.row + direction , this.col + direction];
+    if(boardData.isPlayer(position[0],position[1] , this.getOpponent())){
+      result.push(position);
+    }
+    position = [this.row + direction , this.col - direction];
+    if(boardData.isPlayer(position[0],position[1] , this.getOpponent())){
+      result.push(position);
     }
     return result;
   }
-  getkingMoves() {
+   
+  getRookMoves(boardData) {
     let result = [];
-    for (let i = -1; i <= 1; i++) {
-      for (let j = -1; j <= 1; j++) {
-        if (i !== 0 || j !== 0) {
-          result.push([i, j]);
-        }
+    result = result.concat(this.getMovesInDirection(-1 , 0 , boardData));
+    result = result.concat(this.getMovesInDirection(1 , 0 , boardData));
+    result = result.concat(this.getMovesInDirection(0 ,1 , boardData));
+    result = result.concat(this.getMovesInDirection(0 ,-1 , boardData));
+    return result;
+  }
+  getMovesInDirection(directionRow, directionCol , boardData){
+    let result = [];
+    for(let i =1 ; i< BOARD_SIZE ; i++){
+      let row = this.row + directionRow * i ;
+      let col = this.col + directionCol * i ;
+      if(boardData.isEmpty(row,col)){
+        result.push([row,col]);  
+      }else if (boardData.isPlayer(row,col,this.getOpponent())){
+        result.push([row,col]);
+        return result;
+      }else if (boardData.isPlayer(row,col,this.player)){
+      
+        return result;
       }
     }
+
+    return result ;
+  }
+  getkingMoves(boardData) {
+    let result = [];
+    const relativeMoves = [[-1,-1], [-1,0], [-1,1], [0,-1], [0,1], [1,-1], [1,0], [1,1]] ;
+    for(let relativeMove of relativeMoves){
+      let row = this.row + relativeMove[0];
+      let col = this.col + relativeMove[1];
+      if(!boardData.isPlayer(row,col,this.player)){
+        result.push([row , col]);
+      }
+    }
+
     return result
   }
 
-  getKnightMoves() {
+  getKnightMoves(boardData) {
     let result = [];
 
-    for (let i = -2; i <= 2; i++) {
-      for (let j = -2; j <= 2; j++) {
-        if (i !== j && i !== 0 && j !== 0 && j !== -i && -j !== i) {
-          result.push([i, j]);
-        }
+    const relativeMoves = [[-2,-1], [-1,2], [-1,-2], [1,-2], [-2,1], [2,-1], [1,2], [2,1]] ;
+    for(let relativeMove of relativeMoves){
+      let row = this.row + relativeMove[0];
+      let col = this.col + relativeMove[1];
+      if(!boardData.isPlayer(row,col,this.player)){
+        result.push([row , col]);
       }
     }
+
+    return result
+  }
+
+  getBishopMoves(boardData) {
+    let result = [];
+    result = result.concat(this.getMovesInDirection(-1 , -1 , boardData));
+    result = result.concat(this.getMovesInDirection(-1 , 1 , boardData));
+    result = result.concat(this.getMovesInDirection(1 ,1 , boardData));
+    result = result.concat(this.getMovesInDirection(1 ,-1 , boardData));
     return result;
   }
 
-  getBishopMoves() {
-    let result = [];
-    for (let i = -8; i <= BOARD_SIZE; i++) {
-      for (let j = -8; j <= BOARD_SIZE; j++) {
-        if (i === j || i === -j || -j === i) {
-          if (!(i === 0 && j === 0)) {
-            result.push([i, j]);
-          }
-        }
-      }
-    }
-    return result;
-  }
-
-  getQueenMoves() {
-    let result = [];
-    for (let i = -8; i <= BOARD_SIZE; i++) {
-      result.push([i, 0]);
-      result.push([-i, 0]);
-      result.push([0, i]);
-      result.push([0, -i]);
-      for (let j = -8; j <= BOARD_SIZE; j++) {
-        if (i === j || i === -j || -j === i) {
-          if (!(i === 0 && j === 0)) {
-            result.push([i, j]);
-          }
-        }
-
-      }
-
-    }
-
+  getQueenMoves(boardData) {
+    let result = this.getBishopMoves(boardData);
+    result =result.concat(this.getRookMoves(boardData));
     return result;
 
   }
