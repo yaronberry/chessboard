@@ -46,9 +46,11 @@ tr,td:active{
       background-color:  rgb(208, 140, 240);
     }
     
-    li{
-      float:left;
-      padding: 2.5px;
-      margin-right: 38px;
-     
+    
+
+    th{
+      width: 30px;
+      height: 20px;
+      background-color:#87CEFA;
+      border-collapse: ;
     }
