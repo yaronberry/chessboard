@@ -40,11 +40,12 @@ function showMovesForPiece(row, col) {
 }
 
 function onCellClick( row, col) { // this function make all the "coloring"
-
-  if (selectedPiece !== undefined  && game.tryMove(selectedPiece, row, col ))   {
+ 
+  
+ if (selectedPiece !== undefined  && game.tryMove(selectedPiece, row, col ))   {
     selectedPiece = undefined;
     chessBoard(game.boardData);
-
+    
     
 
   }else{
@@ -131,11 +132,13 @@ function chessBoard(boardData) { // here we created the board
       winnerPopUp.classList.add('winner-dialog');
       table.appendChild(winnerPopUp);
     }  
-
-
-  
-
+    
+    
+    
 }
+
+
+
 
 //window.addEventListener('load', initGame);
 window.addEventListener('load', basicChessBoard);
@@ -144,7 +147,7 @@ window.addEventListener('load', basicChessBoard);
 
 function deletingPlayerTurn(){
   let whichPlayerPopUpCleaner = document.getElementById('whichPlayerPopUp');
-  console.log(whichPlayerPopUpCleaner);
+  //console.log(whichPlayerPopUpCleaner);
   if(whichPlayerPopUpCleaner  !== null ){ 
     whichPlayerPopUpCleaner.remove();
   }
@@ -176,15 +179,12 @@ function basicChessBoard(){
     }
   }
 
-
-
-
-
   document.getElementById("playButton").addEventListener('click', initGame);
- 
-  
-  
 }
 
 
-    
+
+
+  // let eatenPieces = document.getElementById("eatenPieces1");
+    //let gg = boardData.removePiece(row,col);
+   

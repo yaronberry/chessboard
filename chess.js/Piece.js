@@ -62,7 +62,7 @@ class Piece { // a class to represant the making of the pieces + how they "act"
         let position = [this.row + direction + firstTurn , this.col];
         result.push(position);
       } 
-      
+
       let position = [this.row + direction , this.col];
       if (boardData.isEmpty(position[0], position[1])) {
        
@@ -77,6 +77,24 @@ class Piece { // a class to represant the making of the pieces + how they "act"
       if (boardData.isPlayer(position[0], position[1], this.getOpponent())) {
         result.push(position);
       }
+      
+      
+      //en passant but without eating, also currently it can do it to every piece and not just the enmeys pawn 
+      // TODO !!!!
+      position = [this.row , this.col + direction];
+      if (boardData.isPlayer(position[0] , position[1] , this.getOpponent())) {
+        position = [this.row + direction , this.col + direction ];
+        result.push(position);
+      }
+      position = [this.row , this.col - direction];
+      if (boardData.isPlayer(position[0], position[1], this.getOpponent())) {
+        position = [this.row + direction , this.col - direction];
+        result.push(position);
+      }
+
+    
+
+
       return result;
     }
   

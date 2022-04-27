@@ -8,6 +8,13 @@ class Game{
     tryMove(piece, row, col ) {
     const possibleMoves =  this.allowWhichTurnIsIt(piece);
     for(const possibleMove of possibleMoves){
+
+        let helper = 1 ;
+        if(possibleMove[0] === row && possibleMove[1] === col + helper && piece.type === PAWN){
+            const removePiece = this.boardData.removePiece(row,col + helper);
+        }
+
+
       if(possibleMove[0] === row && possibleMove[1] === col){
         const removePiece = this.boardData.removePiece(row,col);
         piece.row = row ;
@@ -31,4 +38,6 @@ class Game{
    }
     return piece.getPossibleMoves(this.boardData);
   }
+
+
 }
