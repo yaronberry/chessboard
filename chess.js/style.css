@@ -1,6 +1,7 @@
 table{
-    margin: 100px;
+    margin: auto;
     border: 4px solid black;
+    position: relative;
    /* outline: 4px solid rgba(255, 47, 47, 0.555);
     outline-offset: 45px;*/    
 }
@@ -11,9 +12,11 @@ table{
 }
 .blackcub{
     background-color: darkolivegreen;
+    user-select: none;
 }
 .whitecub{
     background-color:oldlace;
+    user-select: none;
 }
 tr,td:active{
     background-color: khaki;
@@ -28,16 +31,8 @@ tr,td:active{
     margin-right: auto;
     display: block;
   }
-  /*#cell-00{
-      background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Chess_rdt45.svg/50px-Chess_rdt45.svg.png') ;
-      background-repeat: no-repeat;  
-      background-position: center;
-    }
-    
-    */
-   
-   
-
+ 
+  
     .selected{
       background-color: red;
     }
@@ -52,5 +47,39 @@ tr,td:active{
       width: 30px;
       height: 20px;
       background-color:#87CEFA;
-      border-collapse: ;
+      user-select: none;
+      
+    }
+
+    .winner-dialog{
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50% , -50%);
+      background: white;
+      padding: 50px;
+      border-radius: 10px;
+      width: max-content;
+      user-select: none;
+    }
+
+    .title{
+      text-align: center;
+      user-select: none;
+    }
+
+    .whichPlayerPopUp{
+      float:left ;
+      display: inline;
+      background-color: aquamarine;
+      font-size: 20px;
+    }
+
+    #playButton{
+      
+      text-align: center;
+      background-color: red;
+    }
+    #playButton:hover{
+      cursor: pointer;
     }

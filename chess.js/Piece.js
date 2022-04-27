@@ -52,26 +52,18 @@ class Piece { // a class to represant the making of the pieces + how they "act"
         direction = -1;
       }
      // let firstTurn = 0 ;        trying to add the 2 step 
-     // if(this.row ===1){
-     //   firstTurn = 1 ;
-     // } 
-    //  if(this.row ===6){
-      //  firstTurn = 0 ;
-       
-     // } 
+        if(this.row ===1){
+          let firstTurn = 1 ;
+           let position = [this.row + direction + firstTurn , this.col];
+           result.push(position);
+      } 
+      if(this.row ===6){
+        let firstTurn = -1 ;
+        let position = [this.row + direction + firstTurn , this.col];
+        result.push(position);
+      } 
+      
       let position = [this.row + direction , this.col];
-  
-     // if (boardData.isEmpty(position[0] , position[1])) {
-       // if(this.player === WHITE_PLAYER){
-        //let t = this.row + 1 ;
-        //}else{ let t = this.row - 1 ;}
-        //let col = this.col + 0 ;
-        //console.log([t, col])
-        //position = [t ,col],
-          //result.push(position);
-      
-    //}
-      
       if (boardData.isEmpty(position[0], position[1])) {
        
         result.push(position);

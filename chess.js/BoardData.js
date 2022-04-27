@@ -42,6 +42,7 @@ class BoardData { //here is the father off all the creation (except the board)
         const piece = this.pieces[i] ;
         if(piece.row === row && piece.col === col){
           this.pieces.splice(i, 1); // a function that delete a piece in this index 
+          return piece ;
         }
       }
     }
