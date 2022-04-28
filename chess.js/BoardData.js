@@ -20,7 +20,7 @@ class BoardData { //here is the father off all the creation (except the board)
     getPiece(row, col) {
       for (const piece of this.pieces) {
         if (piece.row === row && piece.col === col) {
-          console.log(piece);
+          //console.log(piece);
           return piece;
         }
       }
@@ -29,6 +29,7 @@ class BoardData { //here is the father off all the creation (except the board)
     isEmpty(row, col) {  //here its return a true or false 
       return this.getPiece(row, col) === undefined;
     }
+
     isPlayer(row, col, player) {
       const piece = this.getPiece(row, col);
       if (piece !== undefined && piece.player === player) {
@@ -42,8 +43,57 @@ class BoardData { //here is the father off all the creation (except the board)
         const piece = this.pieces[i] ;
         if(piece.row === row && piece.col === col){
           this.pieces.splice(i, 1); // a function that delete a piece in this index 
+          let eatenPieces = this.listOfTheEatenPieces(piece);
+          console.log(eatenPieces);
+          this.insertingTheListIntoEachDiv(eatenPieces,piece);
           return piece ;
         }
       }
     }
+  
+
+  listOfTheEatenPieces(piece ,row ,col){
+      let result = [];
+      const piece1 = this.getPiece(row, col);
+      if(piece.type ===PAWN ){
+         result.push(PAWN);
+      }
+      if(piece.type ===ROOK ){ 
+        result.push(ROOK);
+    }
+    if(piece.type === KNIGHT ){
+        result.push(KNIGHT);
+    }
+    if(piece.type ===BISHOP ){
+        result.push(BISHOP);
+    }
+    if(piece.type ===KING ){
+        result.push(KING);
+    }
+    if(piece.type ===QUEEN ){
+        result.push(QUEEN);
+    }
+    return result;
   }
+
+
+
+insertingTheListIntoEachDiv(eatenPieces , piece){
+if(piece.player === DARK_PLAYER){
+let blackPieceEatenBlock = document.getElementById('eatenPiece2');
+const blackPieceEaten = document.createElement('li');
+blackPieceEaten.innerHTML = eatenPieces ;
+//winnerPopUp.classList.add('winner-dialog');
+blackPieceEatenBlock.appendChild(blackPieceEaten);
+}
+
+if(piece.player === WHITE_PLAYER){
+    let whitePieceEatenBlock = document.getElementById('eatenPiece3');
+    const whitePieceEaten = document.createElement('li');
+    whitePieceEaten.innerHTML = eatenPieces ;
+    //winnerPopUp.classList.add('winner-dialog');
+    whitePieceEatenBlock.appendChild(whitePieceEaten);
+    }
+}
+
+}

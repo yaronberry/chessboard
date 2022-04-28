@@ -51,7 +51,7 @@ class Piece { // a class to represant the making of the pieces + how they "act"
       if (this.player === DARK_PLAYER) {
         direction = -1;
       }
-     // let firstTurn = 0 ;        trying to add the 2 step 
+     // adding 2 step for the first turn
         if(this.row ===1){
           let firstTurn = 1 ;
            let position = [this.row + direction + firstTurn , this.col];
