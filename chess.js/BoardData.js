@@ -44,7 +44,6 @@ class BoardData { //here is the father off all the creation (except the board)
         if(piece.row === row && piece.col === col){
           this.pieces.splice(i, 1); // a function that delete a piece in this index 
           let eatenPieces = this.listOfTheEatenPieces(piece);
-          console.log(eatenPieces);
           this.insertingTheListIntoEachDiv(eatenPieces,piece);
           return piece ;
         }
@@ -83,7 +82,6 @@ if(piece.player === DARK_PLAYER){
 let blackPieceEatenBlock = document.getElementById('eatenPiece2');
 const blackPieceEaten = document.createElement('li');
 blackPieceEaten.innerHTML = eatenPieces ;
-//winnerPopUp.classList.add('winner-dialog');
 blackPieceEatenBlock.appendChild(blackPieceEaten);
 }
 
@@ -91,7 +89,6 @@ if(piece.player === WHITE_PLAYER){
     let whitePieceEatenBlock = document.getElementById('eatenPiece3');
     const whitePieceEaten = document.createElement('li');
     whitePieceEaten.innerHTML = eatenPieces ;
-    //winnerPopUp.classList.add('winner-dialog');
     whitePieceEatenBlock.appendChild(whitePieceEaten);
     }
 }

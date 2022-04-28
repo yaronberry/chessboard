@@ -8,12 +8,12 @@ const KNIGHT = 'knight';
 const BISHOP = 'bishop';
 const KING = 'king';
 const QUEEN = 'queen';
-const CHESS_BOARD_ID = 'chess-board' ;
+const CHESS_BOARD_ID = 'chess-board';
 const BOARD_SIZE = 8;
-const whichPlayerPopUp_id = 'whichPlayerPopUp' ;
+const whichPlayerPopUp_id = 'whichPlayerPopUp';
 let selectedPiece;
-let game ;
-const PIECES = [ROOK ,KNIGHT ,BISHOP ,QUEEN ,KING ,BISHOP ,KNIGHT ,ROOK  ];
+let game;
+const PIECES = [ROOK, KNIGHT, BISHOP, QUEEN, KING, BISHOP, KNIGHT, ROOK];
 
 let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
@@ -39,59 +39,48 @@ function showMovesForPiece(row, col) {
   selectedPiece = piece;
 }
 
-function onCellClick( row, col) { // this function make all the "coloring"
- 
-  
- if (selectedPiece !== undefined  && game.tryMove(selectedPiece, row, col ))   {
+function onCellClick(row, col) { // this function make all the "coloring"
+  if (selectedPiece !== undefined && game.tryMove(selectedPiece, row, col)) {
     selectedPiece = undefined;
     chessBoard(game.boardData);
-    
-    
-
-  }else{
-      showMovesForPiece(row, col);
-      
+  } else {
+    showMovesForPiece(row, col);
   }
-  
 }
 
 function addImage(cell, player, name) { // a function to create and insert the image 
   const Image = document.createElement('img');
   Image.src = 'pieces/' + player + '/' + name + '.png';
-  Image.draggable = false ;
+  Image.draggable = false;
   cell.appendChild(Image);
 }
-function initGame(){
+function initGame() {
   game = new Game(WHITE_PLAYER);
- 
- 
   chessBoard(game.boardData);
-   
-  
-     
-  }
+
+}
 
 
 function chessBoard(boardData) { // here we created the board
-  
+
   deletingPlayerTurn();
   const whichPlayerPopUp = document.createElement('div');
-  whichPlayerPopUp.id = 'whichPlayerPopUp' ;
-  whichPlayerPopUp.textContent = game.currentPlayer  + ' turn '  ;
+  whichPlayerPopUp.id = 'whichPlayerPopUp';
+  whichPlayerPopUp.textContent = game.currentPlayer + ' turn ';
   whichPlayerPopUp.classList.add('whichPlayerPopUp');
   document.body.appendChild(whichPlayerPopUp);
 
-    
 
-   table = document.getElementById(CHESS_BOARD_ID);
-   if(table !== null ){
-      table.remove();
-   }
+
+  table = document.getElementById(CHESS_BOARD_ID);
+  if (table !== null) {
+    table.remove();
+  }
 
 
   table = document.createElement('table');
   document.body.appendChild(table);
-  table.id = CHESS_BOARD_ID ;
+  table.id = CHESS_BOARD_ID;
   for (let row = 0; row < BOARD_SIZE; row++) {
     const rowElement = table.insertRow(row);
     for (let col = 0; col < BOARD_SIZE; col++) {
@@ -113,28 +102,28 @@ function chessBoard(boardData) { // here we created the board
     addImage(table.rows[piece.row].cells[piece.col], piece.player, piece.type);
 
   }
-     
-  for(let i= 0; i < BOARD_SIZE; i++){
-    let th =document.createElement('th')
+
+  for (let i = 0; i < BOARD_SIZE; i++) {
+    let th = document.createElement('th')
     th.id = 'th' + i.toString();
-     table.appendChild(th);
-   }
-    for(let i = 0;i<8 ;i++ ){
-    document.getElementById('th'+ i.toString()).innerHTML = letters[i] ;
-    }
-   
+    table.appendChild(th);
+  }
+  for (let i = 0; i < 8; i++) {
+    document.getElementById('th' + i.toString()).innerHTML = letters[i];
+  }
 
 
-    if(game.winner !== undefined){
-      const winnerPopUp = document.createElement('div');
-      const winner = game.winner.charAt(0).toUpperCase() + game.winner.slice(1);
-      winnerPopUp.textContent = winner + 'player wins' ;
-      winnerPopUp.classList.add('winner-dialog');
-      table.appendChild(winnerPopUp);
-    }  
-    
-    
-    
+
+  if (game.winner !== undefined) {
+    const winnerPopUp = document.createElement('div');
+    const winner = game.winner.charAt(0).toUpperCase() + game.winner.slice(1);
+    winnerPopUp.textContent = winner + 'player wins';
+    winnerPopUp.classList.add('winner-dialog');
+    table.appendChild(winnerPopUp);
+  }
+
+
+
 }
 
 
@@ -142,25 +131,24 @@ function chessBoard(boardData) { // here we created the board
 
 //window.addEventListener('load', initGame);
 window.addEventListener('load', basicChessBoard);
- 
 
 
-function deletingPlayerTurn(){
+
+function deletingPlayerTurn() {
   let whichPlayerPopUpCleaner = document.getElementById('whichPlayerPopUp');
-  //console.log(whichPlayerPopUpCleaner);
-  if(whichPlayerPopUpCleaner  !== null ){ 
+  if (whichPlayerPopUpCleaner !== null) {
     whichPlayerPopUpCleaner.remove();
   }
-    }
+}
 
 
-function basicChessBoard(){
-  
-  
+function basicChessBoard() {
+
+
 
   table = document.createElement('table');
   document.body.appendChild(table);
-  table.id = CHESS_BOARD_ID ;
+  table.id = CHESS_BOARD_ID;
   for (let row = 0; row < BOARD_SIZE; row++) {
     const rowElement = table.insertRow(row);
     for (let col = 0; col < BOARD_SIZE; col++) {
@@ -184,7 +172,3 @@ function basicChessBoard(){
 
 
 
-
-  // let eatenPieces = document.getElementById("eatenPieces1");
-    //let gg = boardData.removePiece(row,col);
-   
