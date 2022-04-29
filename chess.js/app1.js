@@ -57,7 +57,10 @@ function addImage(cell, player, name) { // a function to create and insert the i
 function initGame() {
   game = new Game(WHITE_PLAYER);
   chessBoard(game.boardData);
-
+  
+ //game.boardData.listOfTheEatenPieces = undefined;
+  
+ 
 }
 
 
@@ -172,3 +175,26 @@ function basicChessBoard() {
 
 
 
+function checkIfCheck(){
+  let piecesPreviousPlayer = [];
+  for(let piece of game.boardData.pieces){
+    if(piece.getOpponent() === game.currentPlayer){
+      piecesPreviousPlayer.push(piece);
+    }
+  }
+
+
+
+  let result = [];
+  for(let piece of piecesPreviousPlayer){
+    result = result.concat(piece.getPossibleMoves(game.boardData));
+  }
+
+  let kingLocation ;
+  for(let location of game.boardData.pieces){
+    if(location.type === KING && location.player === currentPlayer){
+      kingLocation = [location.row ,location.col];
+    }
+  }
+  
+}
